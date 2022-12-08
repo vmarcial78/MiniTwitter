@@ -17,6 +17,8 @@ public class UserLeaf extends User implements Composite, Observer{
    private List<String> Tweets = new ArrayList<>();
    private List<String> newsFeed = new ArrayList<>(Arrays.asList());
    private ObservableList<String> newsFeedList = FXCollections.observableList(newsFeed);
+   private long lastUpdatedTime=0;
+   private long createdUser;
   
     
    @Override
@@ -33,6 +35,13 @@ public class UserLeaf extends User implements Composite, Observer{
     public UserLeaf(String newID) {
          this.usernameID = newID;
       
+    }
+
+    public long getCreationTime(){
+        return createdUser;
+    }
+    public long getLastUpdatedTime(){
+        return lastUpdatedTime;
     }
     
     @Override
@@ -62,7 +71,10 @@ public class UserLeaf extends User implements Composite, Observer{
 
     public void tweetMessage (String tweet){
         Tweets.add(tweet);
-        //add tweet to own newsfeed
+        //UPDAte 
+        lastUpdatedTime=System.currentTimeMillis();
+        //set(index, tweet string)
+        this.newsFeedList.add("Last Updated: " + lastUpdatedTime);
         newsFeedList.add("-" + this.usernameID + " : " + tweet);
         updateFollowers(tweet);
     }
