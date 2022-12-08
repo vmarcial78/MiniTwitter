@@ -12,6 +12,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.scene.control.Dialog;
 
 
@@ -53,6 +54,12 @@ public class AdminControlPanel{
         
 
         Button positiveButton = new Button("Show Positive Percentage");
+
+        Button ValidateUserButton = new Button( "Validate User ");
+
+        Button LastUpdatedUser  =new Button("Last Updated User's ID");
+
+       
         
 
          
@@ -68,6 +75,7 @@ public class AdminControlPanel{
         TreeItem<Composite> root = new TreeItem<> (rootGroup, new ImageView(rootPic));
         root.setExpanded(true);
         TreeView<Composite> treeView = new TreeView<>(root);
+
 
 
           //action event for add user button 
@@ -155,6 +163,42 @@ public class AdminControlPanel{
             PopUp.showAndWait();
         });
 
+
+        //Validate user actions 
+        ValidateUserButton.setOnAction((ActionEvent event) -> {
+            String newGroup= GroupIDText.getText();
+           
+            String newUser= UserIDText.getText();
+           
+           
+            if(rootGroup.containsGroup(newGroup) || rootGroup.containsUser(newUser)){
+                PopUp.setContentText("Invalid, ID already exists!");
+                PopUp.showAndWait();
+            }
+            //doesn't allow spaces in IDs, invalid
+            else if(newGroup.contains(" ") || newUser.contains(" ")){
+                PopUp.setContentText("Invalid, ID can not contain spaces!");
+                PopUp.showAndWait();
+            }
+           
+            else if(!rootGroup.containsGroup(newGroup) || !rootGroup.containsUser(newUser)){
+                PopUp.setContentText("Valid, ID has not been used!");
+                PopUp.showAndWait();
+            }
+        });
+       
+        //LAST UPdated user action 
+
+        LastUpdatedUser.setOnAction((ActionEvent event) -> {
+
+            updateuser updateuser =new updateuser();
+            rootGroup.accept(updateuser);
+            PopUp.setContentText("User's last updated: "  + updateuser.getLastUpdateUser()); 
+            PopUp.showAndWait();
+        });
+
+
+
         //Put buttons and text buttons in Hbox and v box to display in scene 
     
         HBox userHbox = new HBox(15, UserIDText, addUserButton);
@@ -162,7 +206,7 @@ public class AdminControlPanel{
         HBox GroupTotalHBox = new HBox(15, usertotalButton, grouptotalButton);
         HBox TweetsHBox = new HBox(15, TotalTweetButton, positiveButton);
         VBox treeViewVBox = new VBox(treeView);
-        VBox UserButtonsVbox=new VBox(15,  userViewButton);
+        VBox UserButtonsVbox=new VBox(15, ValidateUserButton,LastUpdatedUser, userViewButton);
         UserButtonsVbox.setAlignment(Pos.CENTER);
         VBox topButtons = new VBox(15, userHbox, groupHbox, UserButtonsVbox, GroupTotalHBox, TweetsHBox);
         VBox bottomButtons=new VBox(15,GroupTotalHBox, TweetsHBox);

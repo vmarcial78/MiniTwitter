@@ -9,10 +9,12 @@ public class Container implements Composite{
     
     private List<Composite> groups = new ArrayList<>();
     private String groupID;
+    private Long createdGroup;
 
    
     public Container(String newID) {
        this.groupID = newID;
+       this.createdGroup=System.currentTimeMillis();
     
     }
 
@@ -66,6 +68,7 @@ public class Container implements Composite{
         return false;
     }
     
+
     //return user 
     public UserLeaf getUser(String userID){
         for (Composite members : groups) {
@@ -107,6 +110,13 @@ public Boolean containsGroup(String memberID){
     return false;
 }
 
+//creation time 
+public long getCreationTime(){
+       return createdGroup;
+    }
+    public void setCreationTime(){
+       createdGroup=System.currentTimeMillis();
+   }
 
 
 
